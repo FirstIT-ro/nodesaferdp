@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign in · NodeSafeRDP</title>
+<link rel="icon" href="/favicon.svg">
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<div class="login">
+  <form id="f" autocomplete="on">
+    <h1>NodeSafeRDP</h1>
+    <div class="muted">Sign in to manage remote machines.</div>
+    <label>Username <input name="username" autocomplete="username" required autofocus></label>
+    <label>Password <input name="password" type="password" autocomplete="current-password" required></label>
+    <button class="primary" type="submit">Sign in</button>
+    <div class="error" id="err" role="alert"></div>
+  </form>
+</div>
+<script src="/static/login.js"></script>
+</body>
+</html>

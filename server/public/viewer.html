@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Remote · NodeSafeRDP</title>
+<link rel="icon" href="/favicon.svg">
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body class="viewer">
+<div class="toolbar">
+  <a href="/" title="Back to machine list">◀ Machines</a>
+  <span class="dot wait" id="dot"></span><span class="name" id="name">…</span>
+  <label class="muted">Screen <select id="monitor"></select></label>
+  <label class="muted">Quality <select id="quality">
+    <option value="35">Low</option><option value="60" selected>Medium</option><option value="80">High</option><option value="92">Best</option>
+  </select></label>
+  <label class="muted">Scale <select id="scale">
+    <option value="1">100%</option><option value="0.75">75%</option><option value="0.5">50%</option><option value="0.35">35%</option>
+  </select></label>
+  <label class="muted">FPS <select id="fps">
+    <option>5</option><option>8</option><option selected>12</option><option>20</option><option>30</option>
+  </select></label>
+  <select id="keys" title="Send key combination">
+    <option value="">Send keys…</option>
+    <option value="win">Windows key</option>
+    <option value="alttab">Alt+Tab</option>
+    <option value="ctrlshiftesc">Ctrl+Shift+Esc (Task Manager)</option>
+    <option value="winr">Win+R (Run)</option>
+    <option value="wind">Win+D (Desktop)</option>
+    <option value="altf4">Alt+F4</option>
+    <option value="ctrlesc">Ctrl+Esc</option>
+  </select>
+  <button id="text" title="Type text on the remote machine">Type text…</button>
+  <span class="spacer"></span>
+  <label class="muted"><input type="checkbox" id="viewonly"> View only</label>
+  <button id="fit" title="Toggle fit to window / 1:1">Fit</button>
+  <button id="refresh" title="Request full refresh">Refresh</button>
+  <button id="fullscreen">Fullscreen</button>
+</div>
+<div class="stage fit" id="stage">
+  <canvas id="screen" tabindex="0" width="16" height="9"></canvas>
+  <div class="overlay" id="overlay">Connecting…</div>
+</div>
+<div class="statusbar">
+  <span id="st-conn">connecting</span>
+  <span id="st-viewers"></span>
+  <span id="st-res"></span>
+  <span id="st-rate"></span>
+  <span>Click the screen to send keyboard input.</span>
+</div>
+<dialog id="dlg">
+  <form method="dialog">
+    <div>Text to type on the remote machine (sent as Unicode keystrokes):</div>
+    <textarea id="dlg-text" maxlength="5000"></textarea>
+    <div class="row"><button value="cancel">Cancel</button><button class="primary" value="send" id="dlg-send">Type it</button></div>
+  </form>
+</dialog>
+<script src="/static/keymap.js"></script>
+<script src="/static/viewer.js"></script>
+</body>
+</html>

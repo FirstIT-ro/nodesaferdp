@@ -1,0 +1,9 @@
+# Never commit secrets or runtime data
+server/config.json
+server/data/
+server/node_modules/
+client/agent.json
+client/*.exe
+client/*.pdb
+*.log
+.env
