@@ -44,7 +44,7 @@ if ! command -v certbot >/dev/null 2>&1; then
     dnf -y install python3 python3-pip augeas-libs >/dev/null
     python3 -m venv /opt/certbot
     /opt/certbot/bin/pip install --quiet --upgrade pip certbot
-    ln -sf /opt/certbot/bin/certbot /usr/local/bin/certbot
+    ln -sf /opt/certbot/bin/certbot /usr/bin/certbot
   fi
 fi
 
@@ -116,12 +116,14 @@ UMask=0077
 WantedBy=multi-user.target
 EOF
 
-cat > /usr/local/bin/nodesaferdp-user <<EOF
+USER_CMD=/usr/bin/nodesaferdp-user
+rm -f /usr/local/bin/nodesaferdp-user   # old location (not in root/sudo PATH on Rocky)
+cat > "$USER_CMD" <<EOF
 #!/bin/sh
 # Manage web console users: nodesaferdp-user add|passwd|del <name> | list
 exec runuser -u $SVC_USER -- env NSR_CONFIG=$CONF_DIR/config.json /usr/bin/node $APP_DIR/cli.js "\$@"
 EOF
-chmod 0755 /usr/local/bin/nodesaferdp-user
+chmod 0755 "$USER_CMD"
 
 systemctl daemon-reload
 systemctl enable nodesaferdp >/dev/null
@@ -241,9 +243,9 @@ EOF
   systemctl enable --now nodesaferdp-certbot.timer >/dev/null
 fi
 
-if ! nodesaferdp-user list | grep -q .; then
+if ! "$USER_CMD" list | grep -q .; then
   step "Create the first web console user ($ADMIN)"
-  nodesaferdp-user add "$ADMIN"
+  "$USER_CMD" add "$ADMIN"
 fi
 
 sleep 1
