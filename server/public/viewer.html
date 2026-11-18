@@ -47,12 +47,13 @@
   <span id="st-viewers"></span>
   <span id="st-res"></span>
   <span id="st-rate"></span>
-  <span>Click the screen to send keyboard input.</span>
+  <span>Click the screen to send keyboard input · Ctrl+V pastes your clipboard</span>
+  <span id="st-flash"></span>
 </div>
 <dialog id="dlg">
   <form method="dialog">
     <div>Text to type on the remote machine (sent as Unicode keystrokes):</div>
-    <textarea id="dlg-text" maxlength="5000"></textarea>
+    <textarea id="dlg-text" maxlength="20000"></textarea>
     <div class="row"><button value="cancel">Cancel</button><button class="primary" value="send" id="dlg-send">Type it</button></div>
   </form>
 </dialog>

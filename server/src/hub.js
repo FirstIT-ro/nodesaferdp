@@ -297,7 +297,7 @@ class Hub {
         if (c) c.send({ t: m.t, vk: int(m.vk, 1, 254, 0), ext: !!m.ext });
         break;
       case 'txt':
-        if (c && typeof m.text === 'string' && m.text.length <= 5000) c.send({ t: 'txt', text: m.text });
+        if (c && typeof m.text === 'string' && m.text.length <= 20000) c.send({ t: 'txt', text: m.text });
         break;
       case 'set': {
         const s = a.settings;

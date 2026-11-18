@@ -208,9 +208,16 @@ canvas.addEventListener('touchend', e => {
 }, { passive: false });
 
 // ---- keyboard ----------------------------------------------------------------
+// Ctrl+V / Cmd+V / Shift+Insert paste the LOCAL clipboard: we let the browser raise
+// its 'paste' event (no permission prompt) and type the text on the remote machine.
+function isPasteShortcut(e) {
+  return ((e.ctrlKey || e.metaKey) && !e.altKey && e.code === 'KeyV') || (e.shiftKey && e.code === 'Insert');
+}
+
 function keyHandler(down) {
   return e => {
     if (document.activeElement !== canvas || viewOnly) return;
+    if (down && isPasteShortcut(e)) return; // not forwarded, not prevented -> 'paste' event follows
     const k = KEYMAP[e.code];
     if (!k) return;
     e.preventDefault();
@@ -224,6 +231,33 @@ function releaseAll() {
   for (const [, k] of pressed) send({ t: 'ku', vk: k[0], ext: k[1] });
   pressed.clear();
 }
+const MAX_TEXT = 20000;
+function pasteText(text) {
+  if (!text || viewOnly) return;
+  if (text.length > MAX_TEXT) {
+    alert(`Clipboard text is too long (${text.length} characters). The limit is ${MAX_TEXT}.`);
+    return;
+  }
+  // Ctrl/Shift/Alt/Win are still held down on the remote machine from the shortcut:
+  // release them first, otherwise the typed characters would become shortcuts.
+  releaseAll();
+  send({ t: 'txt', text });
+  flash(`Pasted ${text.length} character${text.length === 1 ? '' : 's'}`);
+}
+document.addEventListener('paste', e => {
+  if (document.activeElement !== canvas) return;
+  e.preventDefault();
+  pasteText(e.clipboardData && e.clipboardData.getData('text/plain'));
+});
+
+let flashTimer = null;
+function flash(msg) {
+  const el = $('st-flash');
+  el.textContent = msg;
+  clearTimeout(flashTimer);
+  flashTimer = setTimeout(() => { el.textContent = ''; }, 2500);
+}
+
 canvas.addEventListener('blur', releaseAll);
 window.addEventListener('blur', releaseAll);
 
